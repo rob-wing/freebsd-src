@@ -456,6 +456,8 @@ bpf_peers_present(struct bpf_if *bpf)
 	bpf_mtap2_if((_ifp), (_data), (_dlen), (_m))
 #endif
 
+struct rte_bpf_prm;
+struct rte_bpf_prm *ebpf_convert_classic(const struct bpf_program *);
 u_int	ebpf_filter_classic(void *, u_char *, u_int, u_int);
 
 /*
