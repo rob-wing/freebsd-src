@@ -40,6 +40,10 @@ CFLAGS+=	-DLOG_LEVEL="${LOG_LEVEL}"
 CFLAGS+=	-DBPF_VALIDATE
 .endif
 
+.if defined(EBPF_RUN)
+CFLAGS+=	-DEBPF_RUN
+.endif
+
 .if defined(BPF_JIT) &&	\
     (${MACHINE_ARCH} == "amd64" || ${MACHINE_ARCH} == "i386")
 SRCS+=		${SYSDIR}/net/bpf_jitter.c	\
@@ -47,7 +51,10 @@ SRCS+=		${SYSDIR}/net/bpf_jitter.c	\
 CFLAGS+=	-DBPF_JIT_COMPILER
 LIBS+=		-lutil
 .else
-SRCS+=		${SYSDIR}/net/bpf_filter.c
+SRCS+=		${SYSDIR}/net/bpf_filter.c	\
+		${SYSDIR}/net/ebpf_convert.c \
+		${SYSDIR}/net/ebpf_filter.c \
+
 WARNS?=		2
 .endif
 

@@ -226,8 +226,21 @@ main(void)
 #ifdef BPF_JIT_COMPILER
 	ret = bpf_compile_and_filter();
 #else
-	for (i = 0; i < BPF_NRUNS; i++)
+	for (i = 0; i < BPF_NRUNS; i++) {
+#if EBPF_RUN
+		struct bpf_program bpf;
+		bpf.bf_len = nins;
+		bpf.bf_insns = pc;
+		struct rte_bpf_prm *prm;
+
+		prm = ebpf_convert_classic(&bpf);
+		ret = ebpf_filter_classic(prm, pkt, wirelen, buflen);
+		if (prm != NULL)
+			free(prm);
+#else
 		ret = bpf_filter(nins != 0 ? pc : NULL, pkt, wirelen, buflen);
+#endif
+	}
 #endif
 	if (expect_signal != 0) {
 		if (verbose > 1)
