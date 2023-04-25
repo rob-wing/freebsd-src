@@ -456,6 +456,8 @@ bpf_peers_present(struct bpf_if *bpf)
 	bpf_mtap2_if((_ifp), (_data), (_dlen), (_m))
 #endif
 
+u_int	ebpf_filter_classic(void *, u_char *, u_int, u_int);
+
 /*
  * Number of scratch memory words (for BPF_LD|BPF_MEM and BPF_ST).
  */
